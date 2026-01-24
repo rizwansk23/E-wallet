@@ -1,4 +1,5 @@
 import 'package:E_wallet/Home/home.dart';
+import 'package:E_wallet/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,11 +13,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'E-wallet',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        textTheme: Theme.of(context).textTheme.apply(
+          bodyColor: Pallet.text,
+          displayColor: Pallet.text,
+        )
       ),
-      home: const Home(),
+      home:Container(
+        decoration: BoxDecoration(
+          gradient: Pallet.back,
+        ),
+        child: const Home(),
+      ),
     );
   }
 }
