@@ -1,23 +1,38 @@
-import 'package:E_wallet/theme/app_pallet.dart';
+import 'package:e_wallet/login/input.dart';
+import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+
   const Home({super.key});
 
   @override
+  State<Home> createState() => _HomeState();
+
+}
+
+class _HomeState extends State<Home> {
+
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Home',style: TextStyle(color: Pallet.heading),),backgroundColor: Colors.transparent,),
-      backgroundColor: Colors.transparent,
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Container(
-          width: 600,
-          height: 100,
-          decoration: BoxDecoration(
-            color: Pallet.transparent
-          ),
-          child: Text('Home page'),
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(backgroundColor: Colors.transparent,),
+        backgroundColor: Colors.transparent,
+        body: ListView(
+          padding:EdgeInsets.all(20) ,
+
+          children: [
+            Input(label: 'E-mail', controller: email),
+            Input(label: 'Password', controller: password,isPassword: true,)
+          ],
         ),
       ),
     );

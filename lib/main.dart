@@ -1,5 +1,6 @@
-import 'package:E_wallet/Home/home.dart';
-import 'package:E_wallet/theme/app_pallet.dart';
+import 'package:e_wallet/Home/home.dart';
+import 'package:e_wallet/Starting_page/startPage.dart';
+import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,13 +21,17 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(
           bodyColor: Pallet.text,
           displayColor: Pallet.text,
+        ),
+        textSelectionTheme : TextSelectionThemeData(
+            selectionColor: Pallet.background,
+            selectionHandleColor: Colors.white
         )
       ),
       home:Container(
         decoration: BoxDecoration(
           gradient: Pallet.back,
         ),
-        child: const Home(),
+        child: const Startpage(),
       ),
     );
   }
