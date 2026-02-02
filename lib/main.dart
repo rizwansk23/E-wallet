@@ -1,3 +1,6 @@
+import 'package:e_wallet/Auth/Signup/signupPage.dart';
+import 'package:e_wallet/Auth/forgetPassord/forget_password.dart';
+import 'package:e_wallet/Auth/login/loginPage.dart';
 import 'package:e_wallet/Home/home.dart';
 import 'package:e_wallet/Starting_page/startPage.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
@@ -25,13 +28,17 @@ class MyApp extends StatelessWidget {
         textSelectionTheme : TextSelectionThemeData(
             selectionColor: Pallet.background,
             selectionHandleColor: Colors.white
-        )
+        ),
+        scaffoldBackgroundColor: Colors.transparent,
+        appBarTheme: AppBarTheme(
+            iconTheme: IconThemeData(color: Colors.white)
+        ),
       ),
       home:Container(
         decoration: BoxDecoration(
           gradient: Pallet.back,
         ),
-        child: const Startpage(),
+        child: const ForgetPassword(),
       ),
     );
   }

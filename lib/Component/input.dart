@@ -55,7 +55,7 @@ class _InputState extends State<Input> {
               });
             },
             icon:  Icon(
-              password ? Icons.visibility_off : Icons.visibility,
+              password ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                 color: Colors.white,
             size: 29,)
                ): null

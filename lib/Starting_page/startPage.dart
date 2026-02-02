@@ -43,7 +43,8 @@ class _StartpageState extends State<Startpage> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    _controller.animateToPage(2, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+                    // _controller.animateToPage(2, duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+                    Navigator.pushNamed(context, '/signup');
                   },
                   child: Padding(
                     padding: EdgeInsets.all(8),
