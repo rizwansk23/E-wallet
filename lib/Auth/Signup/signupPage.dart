@@ -27,7 +27,7 @@ class _SignupPageState extends State<SignupPage> {
       },
       child: Scaffold(
         appBar: AppBar(backgroundColor: Colors.transparent,toolbarHeight:40),
-        backgroundColor: Colors.transparent,
+        // backgroundColor: Colors.transparent,
         body:ListView(
           padding: const EdgeInsets.only(left: 20,right: 20),
             children: [
@@ -50,7 +50,7 @@ class _SignupPageState extends State<SignupPage> {
                 children: [
                   Text("Don't have an account?"),
                   AuthText(text: "Login" , onTap: (){
-                  },)
+                  },),
                 ],
               )
             ],

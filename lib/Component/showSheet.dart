@@ -4,7 +4,7 @@ void showSheet(BuildContext context){
   showModalBottomSheet(
       context: context,
       builder: (context){
-        return Container(
+        return SizedBox(
           width: double.infinity,
           child: Column(
             children: [
