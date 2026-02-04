@@ -1,4 +1,4 @@
-import 'package:e_wallet/login/input.dart';
+
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -30,8 +30,7 @@ class _HomeState extends State<Home> {
           padding:EdgeInsets.all(20) ,
 
           children: [
-            Input(label: 'E-mail', controller: email),
-            Input(label: 'Password', controller: password,isPassword: true,)
+
           ],
         ),
       ),
