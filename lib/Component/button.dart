@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
   final String text;
-  const Button({super.key,required this.text});
+  final VoidCallback onTap;
+  const Button({super.key,required this.text,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,9 @@ class Button extends StatelessWidget {
                   minimumSize: Size(double.infinity, 60),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25)),)
               ),
-              onPressed: (){showSheet(context);},
+              onPressed: onTap
+                  // (){showSheet(context);}
+              ,
               child: Text(text,textAlign: TextAlign.center,style: TextStyle(color: Pallet.black,fontSize: 18),)
           )
       );

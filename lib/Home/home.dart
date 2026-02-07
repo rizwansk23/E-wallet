@@ -19,10 +19,10 @@ class _HomeState extends State<Home> {
   int _counter = 0;
 
   final List<Widget> page = [
-    LoginPage(),
-    SignupPage(),
-    ForgetPassword(),
-    Startpage(),
+    LoginPage(), //homepage
+    SignupPage(), // contactpage
+    ForgetPassword(), //qr page
+    Startpage(),//profile
   ];
 
   @override
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-      floatingActionButton: Container(
+      floatingActionButton: SizedBox(
         height: 70,
         width: 70,
         child: FloatingActionButton(
@@ -107,6 +107,7 @@ class _HomeState extends State<Home> {
     required int index,
     required int selectedIndex,
   }) {
+
     bool isSelected = index == _counter;
 
     return GestureDetector(
@@ -124,7 +125,7 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: isSelected ?  Pallet.yellow : Colors.transparent,
           ),
-          child: Icon(icon, size: 32),
+          child: Icon(icon, size: 32 , color: isSelected ? Colors.black : Colors.white  ),
         ),
       ),
     );

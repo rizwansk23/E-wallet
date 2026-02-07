@@ -1,6 +1,4 @@
 import 'package:e_wallet/Auth/Signup/signupPage.dart';
-import 'package:e_wallet/Auth/forgetPassword/forget_password.dart';
-import 'package:e_wallet/Auth/login/loginPage.dart';
 import 'package:e_wallet/Home/home.dart';
 import 'package:e_wallet/Starting_page/startPage.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
@@ -33,12 +31,9 @@ class MyApp extends StatelessWidget {
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.white,
-        )
+        ),
       ),
-      home: Container(
-        decoration: BoxDecoration(gradient: Pallet.back),
-        child: const Home(),
-      ),
+      home: const SignupPage(),
     );
   }
 }

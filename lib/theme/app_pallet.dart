@@ -14,17 +14,9 @@ class Pallet{
     stops: [0,0.5]
 
   );
-  static const RadialGradient textfeild = RadialGradient(
-      center: AlignmentGeometry.center,
-      radius: 10,
-      colors:[
-        Colors.transparent,
-        Colors.white38,
-
-
-      ],
-      stops: [0,0.5]
-
+  static const RadialGradient textField = RadialGradient(
+    radius: 20,
+    colors: [Color(0xff3a2815), Colors.white],
   );
   static const Color heading = Colors.white;
   static const Color text = Colors.grey;
