@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class FormValidators {
-    static String? emailValidator(String? value) {
+  static String? emailValidator(String? value) {
     final emailReg = RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-z]{2,4}$');
 
     if (value!.isEmpty || value == '') {
@@ -22,6 +22,18 @@ class FormValidators {
 
     if (value.length < 6) {
       return 'Password must be at least 6 characters';
+    }
+
+    return null;
+  }
+
+  static String? nameValidator(String? value) {
+    if (value!.isEmpty || value == '') {
+      return 'Please enter Name';
+    }
+
+    if (value.length < 3) {
+      return 'Name length is too short';
     }
 
     return null;

@@ -19,6 +19,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController repeatPassword = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,35 +29,38 @@ class _ChangePasswordState extends State<ChangePassword> {
       },
       child: Scaffold(
         appBar: AppBar(backgroundColor: Pallet.background),
-        body: Container(
-          decoration: BoxDecoration(gradient: Pallet.back),
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            children: [
-              H1(text: 'New password'),
-              Gap(gap: 10),
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Text(
-                  'Your new password must be different from previous used password.',
-                  style: TextStyle(fontSize: 16),
+        body: Form(
+          key: _formKey,
+          child: Container(
+            decoration: BoxDecoration(gradient: Pallet.back),
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: [
+                H1(text: 'New password'),
+                Gap(gap: 10),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Text(
+                    'Your new password must be different from previous used password.',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              ),
-              Gap(gap: 40),
-              Input(
-                label: 'New Password',
-                controller: newPassword,
-                validator: FormValidators.passwordValidator,
-                isPassword: true,
-              ),
-              Gap(gap: 20),
-              Input(
-                label: 'Repeat Password',
-                controller: repeatPassword,
-                validator: FormValidators.passwordValidator,
-                isPassword: true,
-              ),
-            ],
+                Gap(gap: 40),
+                Input(
+                  label: 'New Password',
+                  controller: newPassword,
+                  validator: FormValidators.passwordValidator,
+                  isPassword: true,
+                ),
+                Gap(gap: 20),
+                Input(
+                  label: 'Repeat Password',
+                  controller: repeatPassword,
+                  validator: FormValidators.passwordValidator,
+                  isPassword: true,
+                ),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: SafeArea(
@@ -66,15 +71,31 @@ class _ChangePasswordState extends State<ChangePassword> {
             child: Button(
               text: 'Repeat Password',
               onTap: () {
-                showSheet(
-                  context,
-                  Icons.check_box,
-                  'Reset Successfully',
-                  'Please re-login to get started',
-                  () {
-                    Navigator.push(context, myRoute(LoginPage()));
-                  },
-                );
+                if (_formKey.currentState!.validate()) {
+                  if (!(newPassword.text.trim() ==
+                      repeatPassword.text.trim())) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text('please enter correct password'),
+                      ),
+                    );
+                  } else {
+                    showSheet(
+                      context,
+                      Icons.check_box,
+                      'Reset Successfully',
+                      'Please re-login to get started',
+                      () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          myRoute(LoginPage()),
+                          (route) => false,
+                        );
+                      },
+                    );
+                  }
+                }
               },
             ),
           ),

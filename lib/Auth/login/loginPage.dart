@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                 Input(
                   label: 'Name',
                   controller: name,
-                  validator: FormValidators.emailValidator,
+                  validator: FormValidators.nameValidator,
                 ),
                 Gap(gap: 20),
                 Input(

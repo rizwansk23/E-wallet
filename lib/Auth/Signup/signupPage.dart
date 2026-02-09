@@ -2,14 +2,13 @@ import 'package:e_wallet/Auth/login/loginPage.dart';
 import 'package:e_wallet/Component/button.dart';
 import 'package:e_wallet/Component/headingText.dart';
 import 'package:e_wallet/Component/input.dart';
-import 'package:e_wallet/Component/showSheet.dart';
-import 'package:e_wallet/Starting_page/startPage.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:e_wallet/utils/Routes.dart';
 import 'package:e_wallet/utils/formValidator.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
+
   const SignupPage({super.key});
 
   @override
@@ -46,7 +45,7 @@ class _SignupPageState extends State<SignupPage> {
                 Input(
                   label: 'Name',
                   controller: name,
-                  validator: FormValidators.emailValidator,
+                  validator: FormValidators.nameValidator,
                 ),
                 Gap(gap: 20),
                 Input(
@@ -89,7 +88,6 @@ class _SignupPageState extends State<SignupPage> {
                         Navigator.push(
                           context,
                           myRoute(LoginPage()),
-                          // MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       },
                     ),

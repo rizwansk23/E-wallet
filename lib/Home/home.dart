@@ -1,7 +1,7 @@
 import 'package:e_wallet/Auth/Signup/signupPage.dart';
 import 'package:e_wallet/Auth/forgetPassword/forget_password.dart';
 import 'package:e_wallet/Auth/login/loginPage.dart';
-import 'package:e_wallet/Starting_page/startPage.dart';
+import 'package:e_wallet/Starting_page/startpage.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
     LoginPage(), //homepage
     SignupPage(), // contactpage
     ForgetPassword(), //qr page
-    Startpage(),//profile
+    ForgetPassword(),//profile
   ];
 
   @override
