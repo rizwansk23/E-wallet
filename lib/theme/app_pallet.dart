@@ -19,7 +19,6 @@ class Pallet{
       radius: 10,
       colors:[
         Colors.transparent,
-        // Colors.white,
         Colors.white38,
 
 
