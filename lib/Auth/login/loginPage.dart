@@ -6,6 +6,7 @@ import 'package:e_wallet/Component/input.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:e_wallet/utils/Routes.dart';
 import 'package:e_wallet/utils/formValidator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,10 +17,37 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController name = TextEditingController();
+  final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  bool loading = false;
+
+  Future<void> Login() async {
+    try {
+      setState(() => loading = true);
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.text.trim(),
+        password: password.text.trim(),
+      );
+
+      Navigator.pushNamedAndRemoveUntil(context, "/entry",(route)=> false);
+
+    } on FirebaseAuthException catch (e) {
+
+      String msg = "Login failed";
+
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') msg = "Something went wrong";
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
+
+    } finally {
+      setState(() => loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +70,9 @@ class _LoginPageState extends State<LoginPage> {
                 Text('Sign in to your Account'),
                 Gap(gap: 60),
                 Input(
-                  label: 'Name',
-                  controller: name,
-                  validator: FormValidators.nameValidator,
+                  label: 'E-mail',
+                  controller: email,
+                  validator: FormValidators.emailValidator,
                 ),
                 Gap(gap: 20),
                 Input(
@@ -74,9 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                 Gap(gap: 60),
                 Button(text: 'Login', onTap: () {
                   if(_formKey.currentState!.validate()){
-                    print('Login');
+                    loading ? null : Login();
                   }
-                },),
+                },loading: loading,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

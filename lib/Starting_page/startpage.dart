@@ -1,20 +1,37 @@
 import 'package:e_wallet/Auth/Signup/signupPage.dart';
+import 'package:e_wallet/Auth/authpage.dart';
+import 'package:e_wallet/Home/home.dart';
 import 'package:e_wallet/Starting_page/pages.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class StartPage extends StatefulWidget {
 
-  final void Function(bool) onDataReceived;
 
-  const StartPage({super.key,required this.onDataReceived});
+  const StartPage({super.key});
 
   @override
   State<StartPage> createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage> {
+
+  Future<void> finishIntro(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setBool('seenIntro', true);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const AuthPage(),
+      ),
+    );
+  }
+
+
   final List<Map<String, String>> data = [
     {
       'photo': 'page1',
@@ -73,7 +90,7 @@ class _StartPageState extends State<StartPage> {
                     behavior: HitTestBehavior.opaque,
                     onTap: () {
                       if (isLastPage){
-                        widget.onDataReceived(false);
+                       finishIntro(context);
                       }
                       else {
                         _controller.animateToPage(
@@ -115,7 +132,7 @@ class _StartPageState extends State<StartPage> {
                           minimumSize: Size(double.infinity, 60),
                         ),
                         onPressed: () {
-                          widget.onDataReceived(false);
+                          finishIntro(context);
                         },
                         child: Text(
                           'Next',

@@ -38,6 +38,11 @@ dependencies:
   smooth_page_indicator: ^1.0.0
   go_router: ^17.0.1
   firebase_core:
+  firebase_auth:
+  qr_flutter: ^4.1.0
+  lottie:
+  fl_chart: ^1.1.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +66,7 @@ flutter_native_splash:
   color_dark: "#3a2815"
 #  image_dark: assets/logo-development.png
   branding_dark: 'assets/images/Logo/e-wallet.png'
+  branding_light : 'assets/images/Logo/e-wallet_l.png'
 
   android_12:
     image: 'assets/images/Logo/Logo2.png'
@@ -90,6 +96,7 @@ flutter:
     - assets/images/
     - assets/images/Starting_page/
     - assets/images/Logo/
+    - assets/animation/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

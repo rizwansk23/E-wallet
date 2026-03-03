@@ -1,6 +1,13 @@
 import 'package:e_wallet/Auth/Signup/signupPage.dart';
+import 'package:e_wallet/Auth/login/loginPage.dart';
+import 'package:e_wallet/Home/home.dart';
+import 'package:e_wallet/theme/app_pallet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Starting_page/startpage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -11,20 +18,40 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
 
-  bool isNewUser = true;
+  @override
+  void initState() {
+    super.initState();
 
-  void _updateData(bool newData) {
-    setState(() {
-      isNewUser = newData;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _decideRoute();
     });
   }
 
+  Future<void> _decideRoute() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool seenIntro = prefs.getBool('seenIntro') ?? false;
+
+    if (!seenIntro) {
+      _go(const StartPage());
+      return;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      _go(const LoginPage());
+    } else {
+      _go(Home());
+    }
+  }
+
+  void _go(Widget page) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => page),
+    );
+  }
   @override
   Widget build(BuildContext context) {
-    if (isNewUser) {
-      return StartPage(onDataReceived: _updateData);
-    } else {
-      return SignupPage();
-    }
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
   }
 }

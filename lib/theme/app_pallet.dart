@@ -21,7 +21,16 @@ class Pallet{
   static const Color heading = Colors.white;
   static const Color text = Colors.grey;
   static const Color yellow = Color(0xfff5ed31);
+  static const Color orange = Color(0xffe58547);
   static const Color black = Color(0xff191613);
   static const Color transparent = Color(0xff655036);
+  static const Color secondaryBack = Color(0xff5A4532);
+}
 
+
+class Borders {
+  static const BorderRadius bottomRadius = BorderRadius.only(
+  bottomLeft: Radius.circular(30),
+  bottomRight: Radius.circular(30),
+  );
 }

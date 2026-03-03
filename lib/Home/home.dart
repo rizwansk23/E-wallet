@@ -1,8 +1,13 @@
-import 'package:e_wallet/Auth/Signup/signupPage.dart';
-import 'package:e_wallet/Auth/forgetPassword/forget_password.dart';
-import 'package:e_wallet/Auth/login/loginPage.dart';
-import 'package:e_wallet/Starting_page/startpage.dart';
+import 'package:e_wallet/Home/Pages/notification_page.dart';
+import 'package:e_wallet/Home/Pages/payment_success.dart';
+import 'package:e_wallet/Home/Pages/receive_page.dart';
+import 'package:e_wallet/Home/Pages/transfer_page.dart';
+import 'package:e_wallet/Home/card_page.dart';
+import 'package:e_wallet/Home/first_page.dart';
+import 'package:e_wallet/Home/setting_page.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
+import 'package:e_wallet/utils/Routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,86 +19,127 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   bool isActive = false;
   int _counter = 0;
 
+  final user = FirebaseAuth.instance.currentUser;
+
+
+
   final List<Widget> page = [
-    LoginPage(), //homepage
-    SignupPage(), // contactpage
-    ForgetPassword(), //qr page
-    ForgetPassword(),//profile
+    FirstPage(),
+    PaymentSuccess(),
+    CardPage(),
+    SettingPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-
-      body: page[_counter],
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      floatingActionButton: SizedBox(
-        height: 70,
-        width: 70,
-        child: FloatingActionButton(
-          shape: CircleBorder(),
-          autofocus: true,
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          onPressed: () {
-            setState(() {
-              isActive =! isActive;
-            });
-          },
-          child: const Icon(Icons.add, color: Colors.white, size: 35),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: Pallet.back
       ),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
 
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Container(
-            height: 80,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              color: Colors.transparent,
-              border: Border.all(
-                // color: Color(0x12ffffff),
-                color: Color(0xff473819),
-              ),
+              tooltip: 'Notification',
+              onPressed: () {
+                Navigator.push(context, noticeRoute(NotificationPage()));
+              },
+              icon: Icon(CupertinoIcons.bell,size: 24,),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                NavItem(
-                  icon: Icons.home_filled,
-                  label: 'Home',
-                  index: 0,
-                  selectedIndex: _counter,
+          ],
+          actionsPadding: EdgeInsets.symmetric(horizontal: 20),
+          backgroundColor: _counter == 3
+              ? Pallet.secondaryBack
+              : Pallet.background,
+          title: _counter == 2
+              ? Text('Card', style: TextStyle(fontSize: 25, color: Colors.white))
+              : _counter == 0
+              ? Text.rich(
+                  TextSpan(
+                    text: 'Hello,  ',
+                    style: TextStyle(color: Pallet.orange),
+
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: user?.displayName ?? "User",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                )
+              : null,
+          centerTitle: _counter == 2 ? true : false,
+        ),
+
+        body: page[_counter],
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+        floatingActionButton: SizedBox(
+          height: 70,
+          width: 70,
+          child: FloatingActionButton(
+            shape: CircleBorder(),
+            autofocus: true,
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              setState(() {
+                isActive = !isActive;
+              });
+            },
+            child: const Icon(Icons.add, color: Colors.white, size: 35),
+          ),
+        ),
+
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            child: Container(
+              height: 80,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Colors.transparent,
+                border: Border.all(
+                  // color: Color(0x12ffffff),
+                  color: Color(0xff473819),
                 ),
-                NavItem(
-                  icon: Icons.assessment_outlined,
-                  label: 'Analitic',
-                  index: 1,
-                  selectedIndex: _counter,
-                ),
-                const SizedBox(width: 60),
-                NavItem(
-                  icon: Icons.wallet,
-                  label: 'wallet',
-                  index: 2,
-                  selectedIndex: _counter
-                ),
-                NavItem(
-                  icon: Icons.settings_rounded,
-                  label: 'setting',
-                  index: 3,
-                  selectedIndex: _counter,
-                ),
-              ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  NavItem(
+                    icon: Icons.home_filled,
+                    label: 'Home',
+                    index: 0,
+                    selectedIndex: _counter,
+                  ),
+                  NavItem(
+                    icon: Icons.assessment_outlined,
+                    label: 'Analitic',
+                    index: 1,
+                    selectedIndex: _counter,
+                  ),
+                  const SizedBox(width: 60),
+                  NavItem(
+                    icon: Icons.wallet,
+                    label: 'wallet',
+                    index: 2,
+                    selectedIndex: _counter,
+                  ),
+                  NavItem(
+                    icon: Icons.settings_rounded,
+                    label: 'setting',
+                    index: 3,
+                    selectedIndex: _counter,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -107,7 +153,6 @@ class _HomeState extends State<Home> {
     required int index,
     required int selectedIndex,
   }) {
-
     bool isSelected = index == _counter;
 
     return GestureDetector(
@@ -123,9 +168,13 @@ class _HomeState extends State<Home> {
           height: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: isSelected ?  Pallet.yellow : Colors.transparent,
+            color: isSelected ? Pallet.yellow : Colors.transparent,
           ),
-          child: Icon(icon, size: 32 , color: isSelected ? Colors.black : Colors.white  ),
+          child: Icon(
+            icon,
+            size: 32,
+            color: isSelected ? Colors.black : Colors.white,
+          ),
         ),
       ),
     );

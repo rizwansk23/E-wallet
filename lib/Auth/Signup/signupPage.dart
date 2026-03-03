@@ -5,6 +5,8 @@ import 'package:e_wallet/Component/input.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:e_wallet/utils/Routes.dart';
 import 'package:e_wallet/utils/formValidator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -22,6 +24,44 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController password2 = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  
+  bool loading = false;
+
+  Future<void> signup() async {
+    try {
+      setState(() => loading = true);
+
+
+
+      // 🔥 create account
+      UserCredential cred = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: email.text.trim(),
+        password: password1.text.trim(),
+      );
+
+      // 🔥 save name
+      await cred.user!.updateDisplayName(name.text.trim());
+
+      // refresh user
+      await cred.user!.reload();
+
+
+      Navigator.pushNamedAndRemoveUntil(context, "/entry",(route)=> false);
+
+    } on FirebaseAuthException catch (e) {
+
+      String msg = "Login failed";
+
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') msg = "Something went wrong";
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
+
+    } finally {
+      setState(() => loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +105,22 @@ class _SignupPageState extends State<SignupPage> {
                   label: 'Repeated Password',
                   controller: password2,
                   isPassword: true,
-                  validator: FormValidators.passwordValidator,
+                  validator:(value){
+                    if (value!.isEmpty || value == '') {
+                      return 'Please enter password';
+                    }
+                    if (value != password1.text) {
+                      return 'Password Do Not Match';
+                    }
+                    return null;
+                  },
                 ),
                 Gap(gap: 60),
                 Button(text: 'Register', onTap: () {
                   if (_formKey.currentState!.validate()){
-                    print('object');
+                    loading ? null : signup();
                   }
-                },),
+                },loading: loading,),
                 Gap(gap: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
