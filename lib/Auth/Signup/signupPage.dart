@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_wallet/Auth/login/loginPage.dart';
 import 'package:e_wallet/Component/button.dart';
 import 'package:e_wallet/Component/headingText.dart';
@@ -10,7 +11,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
-
   const SignupPage({super.key});
 
   @override
@@ -24,40 +24,39 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController password2 = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  
+
   bool loading = false;
 
   Future<void> signup() async {
     try {
       setState(() => loading = true);
 
-
-
-      // 🔥 create account
+      //  create auth user
       UserCredential cred = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-        email: email.text.trim(),
-        password: password1.text.trim(),
-      );
+            email: email.text.trim(),
+            password: password1.text.trim(),
+          );
 
-      // 🔥 save name
-      await cred.user!.updateDisplayName(name.text.trim());
+      final user = cred.user!;
 
-      // refresh user
-      await cred.user!.reload();
+      // save name in auth
+      await user.updateDisplayName(name.text.trim());
 
+      // save user in firestore
+      await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+        "uid": user.uid,
+        "name": name.text.trim(),
+        "email": email.text.trim(),
+        'password': 1234,
+        "createdAt": FieldValue.serverTimestamp(),
+        "balance": 0,
+      });
 
-      Navigator.pushNamedAndRemoveUntil(context, "/entry",(route)=> false);
-
-    } on FirebaseAuthException catch (e) {
-
-      String msg = "Login failed";
-
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') msg = "Something went wrong";
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(msg)));
-
+      Navigator.pushNamedAndRemoveUntil(context, "/entry", (route) => false);
+    } catch (e, stack) {
+      print("ERROR = $e");
+      print(stack);
     } finally {
       setState(() => loading = false);
     }
@@ -105,7 +104,7 @@ class _SignupPageState extends State<SignupPage> {
                   label: 'Repeated Password',
                   controller: password2,
                   isPassword: true,
-                  validator:(value){
+                  validator: (value) {
                     if (value!.isEmpty || value == '') {
                       return 'Please enter password';
                     }
@@ -116,11 +115,15 @@ class _SignupPageState extends State<SignupPage> {
                   },
                 ),
                 Gap(gap: 60),
-                Button(text: 'Register', onTap: () {
-                  if (_formKey.currentState!.validate()){
-                    loading ? null : signup();
-                  }
-                },loading: loading,),
+                Button(
+                  text: 'Register',
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      loading ? null : signup();
+                    }
+                  },
+                  loading: loading,
+                ),
                 Gap(gap: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -129,14 +132,7 @@ class _SignupPageState extends State<SignupPage> {
                     AuthText(
                       text: "Login",
                       onTap: () {
-
-                        // showSheet(context, Icons.check_box, 'Reset Successfully', 'Please re-login to get started', (){});
-                        // showSheet(context, Icons.check_box, 'Check your email', 'We have sent a instructions to recover your password to your email', (){});
-
-                        Navigator.push(
-                          context,
-                          myRoute(LoginPage()),
-                        );
+                        Navigator.push(context, myRoute(LoginPage()));
                       },
                     ),
                   ],

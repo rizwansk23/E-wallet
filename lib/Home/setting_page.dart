@@ -1,6 +1,7 @@
 import 'package:e_wallet/Component/headingText.dart';
 import 'package:e_wallet/Component/profile_photo.dart';
 import 'package:e_wallet/Component/toggleButton.dart';
+import 'package:e_wallet/Home/Pages/receive_page.dart';
 import 'package:e_wallet/Home/Setting_pages/account.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
 import 'package:e_wallet/utils/Routes.dart';
@@ -31,7 +32,37 @@ class _SettingPageState extends State<SettingPage> {
             ),
             child: Column(
               children: [
-                ProfilePhoto(image: 'assets/images/Logo/Logo2.png'),
+                Container(
+                  width: 100,
+                  height: 120,
+                  child: Stack(
+                    alignment: AlignmentGeometry.center,
+                    children: [
+                      ProfilePhoto(image: 'assets/images/Logo/Logo2.png'),
+                      Positioned(
+                        width: 40,
+                        height: 40,
+                        right: -1,
+                        top: 4,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(context, myRoute(ReceivePage()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Pallet.yellow,
+                              shape: BoxShape.circle
+                            ),
+                            child: Icon(
+                              Icons.qr_code_scanner_outlined,
+                              size: 24,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Gap(gap: 20),
                 Text(
                   'Aliya Leon ',
@@ -43,12 +74,28 @@ class _SettingPageState extends State<SettingPage> {
             ),
           ),
           Gap(gap: 30),
-          Option(icon: Icons.person,title: 'My Account',onTap: (){Navigator.push(context, myRoute(Account()));},),
-          Option(icon: Icons.privacy_tip_sharp,title: 'Privacy & Policy',),
-          Option(icon: CupertinoIcons.exclamationmark_circle_fill,title: 'Help & Center',onTap: ()async{await FirebaseAuth.instance.signOut();
+          Option(
+            icon: Icons.person,
+            title: 'My Account',
+            onTap: () {
+              Navigator.push(context, myRoute(Account()));
+            },
+          ),
+          Option(icon: Icons.privacy_tip_sharp, title: 'Privacy & Policy'),
+          Option(
+            icon: CupertinoIcons.exclamationmark_circle_fill,
+            title: 'Help & Center',
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
 
-          Navigator.pushReplacementNamed(context, "/entry");},),
-          Option(icon: Icons.dark_mode_rounded,title: 'Dark mode',isToggle: true,),
+              Navigator.pushReplacementNamed(context, "/entry");
+            },
+          ),
+          Option(
+            icon: Icons.dark_mode_rounded,
+            title: 'Dark mode',
+            isToggle: true,
+          ),
         ],
       ),
     );
@@ -56,12 +103,18 @@ class _SettingPageState extends State<SettingPage> {
 }
 
 class Option extends StatelessWidget {
-  const Option({super.key,required this.icon,required this.title , this.onTap , this.isToggle = false});
+  const Option({
+    super.key,
+    required this.icon,
+    required this.title,
+    this.onTap,
+    this.isToggle = false,
+  });
 
   final IconData icon;
   final String title;
-  final bool ? isToggle;
-  final VoidCallback? onTap ;
+  final bool? isToggle;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -88,16 +141,15 @@ class Option extends StatelessWidget {
                 colors: [Color(0xff3a2815), Colors.white],
               ),
             ),
-            child: Icon(icon, color: Colors.white,size: 32,),
+            child: Icon(icon, color: Colors.white, size: 32),
           ),
           title: Text(title, style: TextStyle(fontSize: 19)),
-          trailing: isToggle! ? YellowToggleButton() : Icon(Icons.arrow_forward_ios_rounded) ,
+          trailing: isToggle!
+              ? YellowToggleButton()
+              : Icon(Icons.arrow_forward_ios_rounded),
           onTap: onTap,
         ),
       ),
     );
   }
 }
-
-
-

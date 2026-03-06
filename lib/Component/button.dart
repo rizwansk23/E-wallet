@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:e_wallet/Component/showSheet.dart';
 import 'package:e_wallet/Home/home.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
@@ -5,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
   final String text;
-  final VoidCallback onTap;
+  final FutureOr<void> Function()? onTap;
   final bool? loading;
 
   const Button({

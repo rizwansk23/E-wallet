@@ -1,6 +1,8 @@
+import 'package:e_wallet/Auth/forgetPassword/otp_page.dart';
 import 'package:e_wallet/Home/Pages/notification_page.dart';
+import 'package:e_wallet/Home/Pages/password_page.dart';
 import 'package:e_wallet/Home/Pages/payment_success.dart';
-import 'package:e_wallet/Home/Pages/receive_page.dart';
+import 'package:e_wallet/Home/Pages/scanner.dart';
 import 'package:e_wallet/Home/Pages/transfer_page.dart';
 import 'package:e_wallet/Home/card_page.dart';
 import 'package:e_wallet/Home/first_page.dart';
@@ -10,6 +12,7 @@ import 'package:e_wallet/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,10 +31,27 @@ class _HomeState extends State<Home> {
 
   final List<Widget> page = [
     FirstPage(),
-    PaymentSuccess(),
+    OtpPage(),
     CardPage(),
     SettingPage(),
   ];
+
+
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+
+    if (await Permission.camera.request().isGranted) {
+      Navigator.push(context ,myRoute(QRScannerScreen()));
+    }
+
+    if (status.isDenied) {
+      if (await Permission.camera.request().isGranted) {
+        Navigator.push(context ,myRoute(QRScannerScreen()));
+      }
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +108,7 @@ class _HomeState extends State<Home> {
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             onPressed: () {
+              _requestCameraPermission();
               setState(() {
                 isActive = !isActive;
               });

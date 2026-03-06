@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_wallet/Component/headingText.dart';
 import 'package:e_wallet/Component/obscureText.dart';
 import 'package:e_wallet/theme/app_pallet.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -12,60 +14,85 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  List data = ['receive', 'send', 'send'];
+  List datas = ['receive', 'send', 'send'];
   bool isVisible = true;
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUser() {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    return FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .get();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(backgroundColor: Pallet.background),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text('My Available Balance'),
-          ),
-          Gap(gap: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              spacing: 20,
-              children: [
-                Text(
-                  obscure('shj', isVisible),
-                  style: TextStyle(fontSize: 42, color: Colors.white),
+      body: FutureBuilder(
+        future: getUser(),
+        builder: (context, snapshot) {
+
+          if (!snapshot.hasData || snapshot.data == null) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final data = snapshot.data!.data();
+
+          String balance = (data != null && data['balance'] != null)
+              ? data['balance'].toString()
+              : '0'; // default value
+
+          return ListView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text('My Available Balance'),
+              ),
+              Gap(gap: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  spacing: 20,
+                  children: [
+                    Text(
+                      obscure(balance, isVisible),
+                      style: TextStyle(fontSize: 42, color: Colors.white),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isVisible = !isVisible;
+                        });
+                      },
+                      icon: Icon(
+                        !isVisible ? Icons.visibility : Icons.visibility_off,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isVisible = !isVisible;
-                    });
-                  },
-                  icon: Icon(
-                    !isVisible ? Icons.visibility : Icons.visibility_off,
-                    size: 35,
-                    color: Colors.white,
-                  ),
+              ),
+              Gap(gap: 30),
+              _middleContainer(),
+              Gap(gap: 10),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Recent Transactions', style: TextStyle(fontSize: 18)),
+                    Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Gap(gap: 30),
-          _middleContainer(),
-          Gap(gap: 10),
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Recent Transactions', style: TextStyle(fontSize: 18)),
-                Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
-              ],
-            ),
-          ),
-          Gap(gap: 10),
-          ...List.generate(3, (index) => _recentList(data[index])),
-        ],
+              ),
+              Gap(gap: 10),
+              ...List.generate(3, (index) => _recentList(datas[index])),
+            ],
+          );
+        }
       ),
     );
   }
@@ -117,7 +144,7 @@ class _FirstPageState extends State<FirstPage> {
                     color: Pallet.orange,
 
                     spots: const [
-                      FlSpot(0, 30),
+                      FlSpot(0, 0),
                       FlSpot(1, 45),
                       FlSpot(2, 35),
                       FlSpot(3, 60),
